@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}{% endblock %}</title>
+        {% block stylesheets %}
+         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+        crossorigin="anonymous">
+        <style>
+        .post-content {
+            top:0;
+            left:0;
+            position: absolute;
+            color: white;
+            font-size: 80%;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 0.7%;
+            margin: 0% 4% 0% 4%;
+        }
+        .top-buffer { 
+            margin-top:20px; 
+        }
+        .thumb {
+            position: relative;
+        } 
+        .thumb img{
+           width:100%;
+           border: 1px solid #ccc;
+        }
+        </style>
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}
+        
+        {% endblock %}
+        {% block javascripts %}
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
+            crossorigin="anonymous"></script>
+            
+            <script>
+                $("#source").change(function(){
+                    $(this).closest('form').submit();
+                })
+            </script>
+        {% endblock %}
+    </body>
+</html>
