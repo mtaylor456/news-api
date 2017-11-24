@@ -19,7 +19,7 @@ parameters:
     secret: ThisTokenIsNotSoSecretChangeIt
     
     api.newsapi.baseurl: 'https://newsapi.org/v2/'
-    api.newsapi.apikey: 'b2d2d959fd074ed2a55c263cef7cd9db'
+    api.newsapi.apikey: 'api key here'
     api.newsapi.endpoints:
         headlines: top-headlines
         sources: sources
