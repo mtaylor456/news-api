@@ -11,8 +11,9 @@ Symfony 3.3
 1. git clone https://github.com/mtaylor456/news-api
 2. cd news-api
 3. Ensure your system meets symfony requirements: php bin/symfony_requirements
-4. composer install (press return for all parameters when prompted)
-5. route is http://yoursite/news-api/web/image-news
+4. go to app/config/parameters.yml.dist to add api key to api.newsapi.apikey
+5. composer install (press return for all parameters when prompted)
+6. route is http://yoursite/news-api/web/image-news
 
 Info:
 
