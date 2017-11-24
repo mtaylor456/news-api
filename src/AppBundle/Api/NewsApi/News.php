@@ -11,6 +11,10 @@ class News
         $this->endpoints = $endpoints;
     }
     
+    /**
+     * @param string $source
+     * @return array
+     */
     public function headlines($source)
     {
         $params = ['sources'=>$source];
@@ -21,6 +25,10 @@ class News
         return $result['articles'];
     }
     
+    /**
+     * @param string $source
+     * @return array
+     */
     public function everything($source)
     {
         $params = ['sources'=>$source];
@@ -31,6 +39,10 @@ class News
         return $result['articles'];
     }
     
+    /**
+     * @param string $language
+     * @return array
+     */
     public function sources($language)
     {
         $params = ['language'=>$language];

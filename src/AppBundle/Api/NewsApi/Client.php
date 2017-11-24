@@ -13,6 +13,13 @@ class Client
         $this->baseUrl = $baseUrl;
     }
     
+     /**
+     * NewsApi API requests
+     * 
+     * @param string $endpoint
+     * @param array $params
+     * @return array
+     */
     public function request($endpoint, array $params = [])
     {
         $params = array_merge(['apikey'=>$this->apiKey], $params);
