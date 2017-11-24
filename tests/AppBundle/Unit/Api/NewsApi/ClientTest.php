@@ -1,58 +1,85 @@
 <?php
 
-namespace Tests\AppBundle\Controller;
+namespace Tests\AppBundle\Unit\Api\NewApi;
 
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 
 use AppBundle\Api\NewsApi\Client;
-use GuzzleHttp\Client as ClientMock;
 use Tests\AppBundle\Fixtures\NewsApi;
+
+use GuzzleHttp\Client as ClientMock;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7;
+
+use GuzzleHttp\Exception\RequestException;
 
 class ClientTest extends TestCase
 {
-    public function testReturnsValidArray()
+    
+    public function testReturnsValidResponse()
     {
-        $clientMock = $this->createMock(ClientMock::class);
+        $fixture = (new NewsApi())->getNewsStatusOk();
         
-        $fixture = (new NewsApi())->getHeadlinesStatusOk();
+        $stream = Psr7\stream_for($fixture);
+        $response = new Response(200, ['Content-Type' => 'application/json'], $stream);
         
-        $clientMock->method('request')
-                    ->willReturn($fixture);
+        $mock = new MockHandler([
+           $response
+        ]);
+        
+        $handler = HandlerStack::create($mock);
+        
+        $clientMock = new ClientMock(['handler' => $handler]);
         
         $client = new Client($clientMock, '', '');
-
+        
         $result = $client->request('endpoint', []);
 
-        $this->assertArrayHasKey($result, 'articles');
+        $this->assertArrayHasKey('articles', $result);
     }
     
     public function testThrowsExceptionOnCorruptResponse()
     {
-        $clientMock = $this->createMock(ClientMock::class);
+        $this->expectException(\RuntimeException::class);  
         
-        $clientMock->method('request')
-                    ->willReturn('');
+        $stream = Psr7\stream_for('');
+        $response = new Response(200, ['Content-Type' => 'application/json'], $stream);
+        
+        $mock = new MockHandler([
+           $response
+        ]);
+        
+        $handler = HandlerStack::create($mock);
+        
+        $clientMock = new ClientMock(['handler' => $handler]);
         
         $client = new Client($clientMock, '', '');
-
-        $result = $client->request('endpoint', []);
         
-        $this->expectException(InvalidArgumentException::class);  
+        $result = $client->request('endpoint', []);
     }
     
     public function testThrowsExceptionOnError()
     {
-        $clientMock = $this->createMock(ClientMock::class);
+         $this->expectException(\RuntimeException::class);
         
         $fixture = (new NewsApi())->getStatusError();
         
-        $clientMock->method('request')
-                    ->willReturn("{'status':'error'}");
+        $stream = Psr7\stream_for($fixture);
+        $response = new Response(200, ['Content-Type' => 'application/json'], $stream);
         
-        $result = $client->request('endpoint', []);            
-                
+        $mock = new MockHandler([
+           $response
+        ]);
+        
+        $handler = HandlerStack::create($mock);
+        
+        $clientMock = new ClientMock(['handler' => $handler]);
+        
         $client = new Client($clientMock, '', '');
-
-        $this->expectException(InvalidArgumentException::class); 
+        
+        $result = $client->request('endpoint', []);
     }
 }

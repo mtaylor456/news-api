@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\AppBundle\Controller;
+namespace Tests\AppBundle\Unit\Api\NewApi;
 
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 
@@ -12,53 +12,56 @@ class NewsClientTest extends TestCase
 {
     public function setUp()
     {
-        $clientMock = $this->createMock(Client::class);
+        $this->clientMock = $this->createMock(Client::class);
     }
     
     public function tearDown()
     {
-        $clientMock = null;
+        $this->clientMock = null;
     }
     
     public function testHeadlinesReturnsValidArray()
     {
         $fixture = (new NewsApi())->getNewsStatusOk();
         
-        $clientMock->method('request')
+        $this->clientMock->method('request')
                     ->willReturn(json_decode($fixture, 1));
         
-        $client = new News($clientMock, ['headlines'=>'']);
+        $client = new News($this->clientMock, ['headlines'=>'']);
 
-        $result = $client->request('endpoint', []);
+        $result = $client->headlines('endpoint', []);
 
-        $this->assertArrayHasKey($result, 'id');
+        $this->assertTrue(is_array($result));
+        $this->assertArrayHasKey('author', $result[0]);
     }
     
     public function testEverythingReturnsValidArray()
     {
         $fixture = (new NewsApi())->getNewsStatusOk();
         
-        $clientMock->method('request')
+        $this->clientMock->method('request')
                     ->willReturn(json_decode($fixture, 1));
         
-        $client = new News($clientMock, ['headlines'=>'']);
+        $client = new News($this->clientMock, ['everything'=>'']);
 
-        $result = $client->request('endpoint', []);
-
-        $this->assertArrayHasKey($result, 'id');
+        $result = $client->everything('endpoint', []);
+        
+        $this->assertTrue(is_array($result));
+        $this->assertArrayHasKey('author', $result[0]);
     }
     
     public function testSourcesReturnsValidArray()
     {
-        $fixture = (new NewsApi())->getHeadlinesStatusOk();
+        $fixture = (new NewsApi())->getSourcesStatusOk();
         
-        $clientMock->method('request')
+        $this->clientMock->method('request')
                     ->willReturn(json_decode($fixture, 1));
         
-        $client = new News($clientMock, ['headlines'=>'']);
+        $client = new News($this->clientMock, ['sources'=>'']);
 
-        $result = $client->request('endpoint', []);
-
-        $this->assertArrayHasKey($result, 'id');
+        $result = $client->sources('endpoint', []);
+        
+        $this->assertTrue(is_array($result));
+        $this->assertArrayHasKey('id', $result[0]);
     }
 }
